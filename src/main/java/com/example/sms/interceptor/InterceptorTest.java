@@ -1,12 +1,15 @@
 package com.example.sms.interceptor;
-
+import com.example.sms.service.InterceptorServiceImpl;
+import org.apache.commons.io.IOUtils;
 import com.example.sms.entity.ApiRequestInfo;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.util.ContentCachingResponseWrapper;
 
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.text.SimpleDateFormat;
@@ -16,6 +19,10 @@ import java.util.Enumeration;
 public class InterceptorTest implements HandlerInterceptor {
     private long startTime;
 
+
+    //add here
+    @Autowired
+            private InterceptorServiceImpl interceptorService;
 
 
 
@@ -101,7 +108,7 @@ public class InterceptorTest implements HandlerInterceptor {
         apiRequestInfo.setErrorTrace(errorStackTrace);
 
 
-        starService.saveEntity(apiRequestInfo);
+        interceptorService.saveEntity(apiRequestInfo);
 
 
     }
@@ -117,7 +124,7 @@ public class InterceptorTest implements HandlerInterceptor {
         return headerNamesStr.toString();
     }
 
-    private String getResponse(ContentCachingResponseWrapper contentCachingResponseWrapper) {
+    private String getResponse(ContentCachingResponseWrapper contentCachingResponseWrapper) throws IOException {
 
         String response = IOUtils.toString(contentCachingResponseWrapper.getContentAsByteArray(), contentCachingResponseWrapper.getCharacterEncoding());
         return response;
@@ -129,4 +136,4 @@ public class InterceptorTest implements HandlerInterceptor {
 
 
 }
-}
+
